@@ -51,6 +51,8 @@ const categories = [
 
 export default function HomePage() {
   const [darkMode, setDarkMode] = useState(false)
+  const [selectedComponents, setSelectedComponents] = useState({})
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [cartItems, setCartItems] = useState([])
   const router = useRouter()
