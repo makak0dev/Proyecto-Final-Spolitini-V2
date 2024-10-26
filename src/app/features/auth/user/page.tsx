@@ -182,7 +182,8 @@ export default function HomePage() {
   }
 
   return (
-
+<html>
+  <body>
     <motion.div
     className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}
     initial={false}
@@ -385,5 +386,8 @@ export default function HomePage() {
         </div>
       </footer>
     </motion.div>
+        
+  </body>
+</html>
   )
 }

@@ -534,6 +534,9 @@ export default function BuildYourPCPage() {
     return <Preloader />
   }
   return (
+  <html>       
+  <body>
+  
       <motion.div
       className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}
       initial={false}
@@ -794,5 +797,8 @@ export default function BuildYourPCPage() {
         </div>
       </footer>
     </motion.div>
-  )
+        
+  </body>
+  </html>
+    )
 }

@@ -173,6 +173,9 @@ export default function HomePage({ params }: { params: { id?: string } }) {
   }
 
   return (
+     <html>
+     
+  <body>
     <motion.div
       className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}
       initial={false}
@@ -510,5 +513,8 @@ export default function HomePage({ params }: { params: { id?: string } }) {
         </div>
       </footer>
     </motion.div>
+        
+  </body>
+  </html>
   )
 }
