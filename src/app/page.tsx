@@ -15,7 +15,6 @@ import localFont from "next/font/local"
 import Preloader from '@/components/atoms/preloader'
 import { ScrollArea } from "@/components/atoms/scroll-area"
 import { motion, AnimatePresence } from "framer-motion"
-import { metadata } from "Metadata"
 import {
   Sheet,
   SheetContent,

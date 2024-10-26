@@ -12,7 +12,6 @@ import { Button } from "@/components/atoms/button"
 import { ClerkProvider, SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import  children  from '@/app/features/auth/users/children'
 import { motion, AnimatePresence } from "framer-motion"
-import { metadata } from "Metadata"
 import { ScrollArea } from "@/components/atoms/scroll-area"
 
 

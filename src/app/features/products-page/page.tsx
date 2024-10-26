@@ -12,8 +12,6 @@ import { Checkbox } from "@/components/atoms/checkbox"
 import Preloader from "@/components/atoms/preloader"
 import { motion, AnimatePresence } from "framer-motion"
 
-import { metadata } from "Metadata";
-
 
 import {
   Select,

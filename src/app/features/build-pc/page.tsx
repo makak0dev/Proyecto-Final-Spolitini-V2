@@ -13,8 +13,6 @@ import { Badge } from "@/components/atoms/badge"
 
 import { ClerkProvider, SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion"
-
-import { metadata } from "Metadata";
 import Preloader from "@/components/atoms/preloader"
 
 
