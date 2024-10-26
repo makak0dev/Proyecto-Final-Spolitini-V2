@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo} from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/atoms/button"
@@ -253,6 +253,8 @@ export default function BuildYourPCPage() {
   const [showSummary, setShowSummary] = useState(false)
   const [loading, setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
+
 
 
   const [accountModalOpen, setAccountModalOpen] = useState(false)
@@ -532,8 +534,6 @@ export default function BuildYourPCPage() {
     return <Preloader />
   }
   return (
-    <html>
-      <body>
       <motion.div
       className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}
       initial={false}
@@ -576,7 +576,7 @@ export default function BuildYourPCPage() {
                   <Button
                     variant="ghost"
                     className="hidden md:flex hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 font-whyte transition-all duration-300"
-                    onClick={() => router.push('/sign-in')}
+                    onClick={() => router.push('/features/auth/user')}
                   >
                     <User className="h-4 w-4" />
                     <span className="ml-1 hidden xl:inline">Mi Cuenta</span>
@@ -588,22 +588,61 @@ export default function BuildYourPCPage() {
                   <Button variant="ghost" className="relative hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 font-whyte transition-all duration-300">
                     <ShoppingCart className="h-4 w-4" />
                     <span className="ml-1 hidden xl:inline">Carrito</span>
-                    <Badge className="absolute -top-2 -right-2 bg-red-500">{cartItems.length}</Badge>
+                    <Badge className="absolute -top-2 -right-2 bg-red-500">{totalItems}</Badge>
                   </Button>
                 </SheetTrigger>
                 <SheetContent className="bg-white dark:bg-gray-800 dark:border-gray-700 transition-all duration-300">
                   <SheetHeader>
                     <SheetTitle className="dark:text-white text-center font-whyte">Carrito de Compras</SheetTitle>
                     <SheetDescription className="dark:text-white font-bold text-md font-whyte">
-                      Total: ${cartItems.reduce((sum, item) => sum + item.price, 0).toLocaleString()}
+                      Total: ${totalPrice.toLocaleString()}
                     </SheetDescription>
                   </SheetHeader>
-                  {cartItems.map((item, index) => (
-                    <div key={index} className="py-2">
-                      <h3 className="font-semibold font-whyte">{item.name}</h3>
-                      <p>${item.price.toLocaleString()}</p>
-                    </div>
-                  ))}
+                  <ScrollArea className="h-[calc(100vh-200px)] mt-4">
+                    {cartItems.map((item, index) => (
+                      <div key={index} className="py-2 flex items-center border-b">
+                        <Image src={item.image} alt={item.name} width={50} height={50} className="mr-4 rounded-md" />
+                        <div className="flex-grow">
+                          <h3 className="font-semibold font-whyte">{item.name}</h3>
+                          <p>${(item.price * item.quantity).toLocaleString()}</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <div className="flex items-center border rounded-md">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => updateCartItemQuantity(index, -1)}
+                              className="px-2 py-1"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="px-2">{item.quantity}</span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => updateCartItemQuantity(index, 1)}
+                              className="px-2 py-1"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeCartItem(item.id)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </ScrollArea>
+                  <SheetFooter className="mt-4">
+                    <Button className="w-full bg-blue-600 hover:bg-blue-900 rounded text-white font-whyte">
+                      Comprar
+                    </Button>
+                  </SheetFooter>
                 </SheetContent>
               </Sheet>
               <Button variant="ghost" onClick={toggleDarkMode} className="hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 transition-all duration-300">
@@ -638,6 +677,7 @@ export default function BuildYourPCPage() {
                           variant="ghost"
                           className="w-full justify-start py-2 text-lg hover:text-[#3B82F6] dark:hover:text-gray-300 font-whyte transition-all duration-300"
                           onClick={() => {
+                            
                             setMobileMenuOpen(false)
                             router.push('/mi-cuenta')
                           }}
@@ -754,7 +794,5 @@ export default function BuildYourPCPage() {
         </div>
       </footer>
     </motion.div>
-      </body>
-    </html>
-  );
+  )
 }

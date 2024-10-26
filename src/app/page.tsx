@@ -58,6 +58,8 @@ export default function HomePage({ params }: { params: { id?: string } }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [showSummary, setShowSummary] = useState(false)
   const [selectedImage, setSelectedImage] = useState("")
+  const router = useRouter()
+
 
   interface CartItem {
     id: number
@@ -213,7 +215,7 @@ export default function HomePage({ params }: { params: { id?: string } }) {
                   <Button
                     variant="ghost"
                     className="hidden md:flex hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 font-whyte transition-all duration-300"
-                    onClick={() => router.push('/sign-in')}
+                    onClick={() => router.push('/features/auth/user')}
                   >
                     <User className="h-4 w-4" />
                     <span className="ml-1 hidden xl:inline">Mi Cuenta</span>
