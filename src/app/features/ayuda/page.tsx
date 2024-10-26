@@ -498,7 +498,6 @@ export default function AyudaPage() {
           </div>
         </div>
       </footer>
-    </div>
     </motion.div>
 
   </body>
