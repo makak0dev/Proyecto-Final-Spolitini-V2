@@ -1,28 +1,22 @@
 "use client"
 
-import { useState, useEffect} from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/components/atoms/button"
-import { Input } from "@/components/atoms/input"
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/atoms/card"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/atoms/accordion"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms/tabs"
-
-
-
-import { ChevronRight, ChevronDown, Search, ShoppingCart, User, Menu, Sun, Moon, Facebook, Instagram, Twitter, HelpCircle, Tag, Cpu, Package, Minus, Plus, X } from "lucide-react"
-import { Badge } from "@/components/atoms/badge"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/atoms/dialog"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/atoms/button";
+import { Input } from "@/components/atoms/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/atoms/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/atoms/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/atoms/tabs";
+import { ChevronRight, ChevronDown, Search, ShoppingCart, User, Menu, Sun, Moon, Facebook, Instagram, Twitter, HelpCircle, Tag, Cpu, Package, Minus, Plus, X } from "lucide-react";
+import { Badge } from "@/components/atoms/badge";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/atoms/dialog";
 import { ClerkProvider, SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { motion, AnimatePresence } from "framer-motion"
-import { cabin } from '@/lib/fonts'
-import localFont from "next/font/local"
-import Preloader from "@/components/atoms/preloader"
-import { ScrollArea } from "@/components/atoms/scroll-area"
-
-
+import { motion, AnimatePresence } from "framer-motion";
+import { cabin } from '@/lib/fonts';
+import localFont from "next/font/local";
+import Preloader from "@/components/atoms/preloader";
+import { ScrollArea } from "@/components/atoms/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -31,101 +25,97 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetFooter,
-} from "@/components/atoms/sheet"
+} from "@/components/atoms/sheet";
 
 export default function AyudaPage() {
-  const [darkMode, setDarkMode] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [selectedComponents, setSelectedComponents] = useState({})
-  const [selectedBrand, setSelectedBrand] = useState(null)
-  const [cartItems, setCartItems] = useState([])
-  const [sortOrder, setSortOrder] = useState("default")
-  const [searchQuery, setSearchQuery] = useState("")
-  const [accountModalOpen, setAccountModalOpen] = useState(false)
-  const [showSummary, setShowSummary] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [cart, setCart] = useState<CartItem[]>([])
-  const router = useRouter()
-
-
+  const [darkMode, setDarkMode] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [selectedComponents, setSelectedComponents] = useState({});
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [sortOrder, setSortOrder] = useState("default");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const router = useRouter();
 
   interface CartItem {
-    id: number
-    name: string
-    price: number
-    quantity: number
-    image: string
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
   }
 
   useEffect(() => {
     // Load dark mode preference from localStorage
-    const savedDarkMode = localStorage.getItem('darkMode')
-    setDarkMode(savedDarkMode === 'true')
+    const savedDarkMode = localStorage.getItem('darkMode');
+    setDarkMode(savedDarkMode === 'true');
 
     // Load cart items from localStorage
-    const savedCartItems = localStorage.getItem('cartItems')
+    const savedCartItems = localStorage.getItem('cartItems');
     if (savedCartItems) {
-      setCartItems(JSON.parse(savedCartItems))
+      setCartItems(JSON.parse(savedCartItems));
     }
 
     setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }, [])
+      setLoading(false);
+    }, 2000);
+  }, []);
 
-  const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0)
-  const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0)
+  const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
   const addToCart = () => {
     const newCartItems = Object.values(selectedComponents).map(component => ({
       ...component,
       quantity: 1
-    }))
-    setCartItems((prevItems) => [...prevItems, ...newCartItems])
-    setSelectedComponents({})
-    setCurrentStep(0)
-    setShowSummary(false)
+    }));
+    setCartItems((prevItems) => [...prevItems, ...newCartItems]);
+    setSelectedComponents({});
+    setCurrentStep(0);
+    setShowSummary(false);
   }
 
   const updateCartItemQuantity = (index: number, change: number) => {
     setCartItems(prevItems => {
       const newItems = prevItems.map((item, i) => 
         i === index ? { ...item, quantity: Math.max(1, item.quantity + change) } : item
-      )
-      return newItems
-    })
+      );
+      return newItems;
+    });
   }
 
   const removeCartItem = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id))
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
   }
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
-
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const toggleDarkMode = () => {
-    const newDarkMode = !darkMode
-    setDarkMode(newDarkMode)
-    localStorage.setItem('darkMode', newDarkMode.toString())
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', newDarkMode.toString());
   }
-
 
   useEffect(() => {
     if (darkMode) {
-      document.documentElement.classList.add('dark')
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.remove('dark');
     }
-  }, [darkMode])
+  }, [darkMode]);
 
   const navItems = [
     { name: "Productos", href: "/features/products-page", icon: <Package className="mr-2 h-4 w-4" /> },
     { name: "Armá tu PC", href: "/features/build-pc", icon: <Cpu className="mr-2 h-4 w-4 " /> },
     { name: "Ofertas", href: "#", icon: <Tag className="mr-2 h-4 w-4" /> },
     { name: "Ayuda", href: "/features/ayuda", icon: <HelpCircle className="mr-2 h-4 w-4" /> },
-  ]
+  ];
 
   const faqSections = [
     {
@@ -141,38 +131,36 @@ export default function AyudaPage() {
     },
     { title: "Section 2", questions: [] },
     { title: "Section 3", questions: [] },
-  ]
+  ];
 
-  const [activeSection, setActiveSection] = useState("Section 1")
-  const [openQuestions, setOpenQuestions] = useState<string[]>([])
+  const [activeSection, setActiveSection] = useState("Section 1");
+  const [openQuestions, setOpenQuestions] = useState<string[]>([]);
 
   const toggleQuestion = (question: string) => {
     setOpenQuestions(prev => 
       prev.includes(question) 
         ? prev.filter(q => q !== question)
         : [...prev, question]
-    )
+    );
   }
 
   const brandLogos = [
     { name: "AMD", image: "/placeholder.svg?height=50&width=100" },
-    { name: "NVIDIA", image: "/placeholder.svg?height=50&width=100" },
+    { name: "NVIDIA", image: "/placeholder.svg?height= 50&width=100" },
     { name: "Intel", image: "/placeholder.svg?height=50&width=100" },
     { name: "ASUS", image: "/placeholder.svg?height=50&width=100" },
     { name: "MSI", image: "/placeholder.svg?height=50&width=100" },
     { name: "Gigabyte", image: "/placeholder.svg?height=50&width=100" },
     { name: "Corsair", image: "/placeholder.svg?height=50&width=100" },
     { name: "Logitech", image: "/placeholder.svg?height=50&width=100" },
-  ]
+  ];
 
   if (loading) {
-    return <Preloader />
+    return <Preloader />;
   }
 
   return (
-<html>
-  <body>
-  <motion.div
+    <motion.div
       className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}
       initial={false}
       animate={{
@@ -208,7 +196,7 @@ export default function AyudaPage() {
             <div className="flex items-center space-x-2">
               <ClerkProvider>
                 <SignedIn>
-                  <UserButton showName />
+                  <User Button showName />
                 </SignedIn>
                 <SignedOut>
                   <Button
@@ -216,7 +204,7 @@ export default function AyudaPage() {
                     className="hidden md:flex hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 font-whyte transition-all duration-300"
                     onClick={() => router.push('/features/auth/user')}
                   >
-                    <User className="h-4 w-4" />
+                    <User  className="h-4 w-4" />
                     <span className="ml-1 hidden xl:inline">Mi Cuenta</span>
                   </Button>
                 </SignedOut>
@@ -249,7 +237,7 @@ export default function AyudaPage() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => updateCartItemQuantity(index, -1)}
+                              onClick={() => updateCartItemQuantity(index , -1)}
                               className="px-2 py-1"
                             >
                               <Minus className="h-4 w-4" />
@@ -315,12 +303,11 @@ export default function AyudaPage() {
                           variant="ghost"
                           className="w-full justify-start py-2 text-lg hover:text-[#3B82F6] dark:hover:text-gray-300 font-whyte transition-all duration-300"
                           onClick={() => {
-                            
-                            setMobileMenuOpen(false)
-                            router.push('/mi-cuenta')
+                            setMobileMenuOpen(false);
+                            router.push('/mi-cuenta');
                           }}
                         >
-                          <User className="mr-2 h-4 w-4" />
+                          <User  className="mr-2 h-4 w-4" />
                           Mi Cuenta
                         </Button>
                       </li>
@@ -336,7 +323,6 @@ export default function AyudaPage() {
       <main className="flex-grow container-2xl px-12 py-8 bg-gray-200 dark:bg-gradient-to-t from-gray-800 via-gray-600 to-slate-700 transition-all duration-500">
         <div className="px-5">
           <h1 className="text-4xl mt-16 font-bold mb-8 dark:text-white font-whyte transition-all duration-100">Preguntas Frecuentes</h1>
-          
           <div className="mb-6">
             <Tabs>
               <TabsList className="w-full bg-transparent p-0 flex justify-start space-x-4">
@@ -358,7 +344,7 @@ export default function AyudaPage() {
             </Tabs>
           </div>
           <Card className="w-full bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden transition-all duration-250 ease-in-out hover:border-blue-500 dark:hover:border-blue-400 border-2 border-transparent">
-            <CardContent className="p-6">
+            < CardContent className="p-6">
               {faqSections.map((section) => (
                 <div key={section.title} className={activeSection === section.title ? '' : 'hidden'}>
                   {section.questions.map((item, index) => (
@@ -437,7 +423,7 @@ export default function AyudaPage() {
                   <DialogTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="mt-auto rounded-lg text-base bg-blue-600 hover:bg-blue-900 text-white font-whyte1"
+                      className="mt-auto rounded-lg text-base bg-blue-600 hover:bg-blue-900 text-white font- whyte1"
                     >
                       Iniciar Sesion
                     </Button>
@@ -491,17 +477,13 @@ export default function AyudaPage() {
             </div>
           </div>
           <div className="mt-12 text-center text-base font-whyte">
-            © 2024 NexusGames. Todos los derechos reservados.
+            2024 NexusGames. Todos los derechos reservados.
           </div>
           <div className="mt-6 text-center text-sm font-whyte1">
-            Made by Makak0 With 💖
+            Made by Makak0 With 
           </div>
         </div>
       </footer>
     </motion.div>
-
-  </body>
-</html>  
-
-  )
+  );
 }
