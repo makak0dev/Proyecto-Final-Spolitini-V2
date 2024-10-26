@@ -11,6 +11,8 @@ import { Badge } from "@/components/atoms/badge"
 import { Button } from "@/components/atoms/button"
 import { ClerkProvider, SignIn, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import  children  from '@/app/features/auth/users/children'
+import { motion, AnimatePresence } from "framer-motion"
+import { metadata } from "Metadata"
 
 
 import {
@@ -113,26 +115,32 @@ export default function HomePage() {
   }
 
   return (
-    <html>
+<html>
       <body>
-        <div className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}>
-        <header className="bg-[#0046BE] dark:bg-gray-800 text-white">
+      <motion.div
+      className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}
+      initial={false}
+      animate={{
+        backgroundColor: darkMode ? '#1a202c' : '#f7fafc',
+        color: darkMode ? '#f7fafc' : '#1a202c'
+      }}
+      transition={{ duration: 0.5 }}
+    >
+      <header className="bg-gradient-to-r from-blue-700 to-blue-900 dark:from-gray-800 dark:to-gray-900 text-white transition-all duration-500">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo section */}
             <div className="flex-shrink-0">
-              <Link href="/" className="text-2xl font-bold">
-                CompraGamer
+              <Link href="/" className="text-2xl font-bold font-whyte">
+                NexusGames
               </Link>
             </div>
 
-            {/* Navigation section - centered */}
             <nav className="hidden lg:flex flex-grow justify-center">
               <ul className="flex space-x-2">
                 {navItems.map((item) => (
                   <li key={item.name}>
                     <Link href={item.href}>
-                      <Button variant="ghost" className="hover:bg-[#3B82F6] rounded-xl dark:hover:bg-gray-700 px-2 py-1">
+                      <Button variant="ghost" className="hover:bg-[#3B82F6] rounded-xl font-whyte dark:hover:bg-gray-700 px-2 py-1 transition-all duration-300">
                         {item.icon}
                         <span className="ml-1 hidden xl:inline">{item.name}</span>
                       </Button>
@@ -142,50 +150,55 @@ export default function HomePage() {
               </ul>
             </nav>
 
-            {/* User actions section */}
             <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                className="hidden md:flex hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1"
-                onClick={() => router.push('/user')}
-              >
-                <User className="h-4 w-4" />
-                <span className="ml-1 hidden xl:inline">Mi Cuenta</span>
-
-              </Button>
+              <ClerkProvider>
+                <SignedIn>
+                  <UserButton showName />
+                </SignedIn>
+                <SignedOut>
+                  <Button
+                    variant="ghost"
+                    className="hidden md:flex hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 font-whyte transition-all duration-300"
+                    onClick={() => router.push('/sign-in')}
+                  >
+                    <User className="h-4 w-4" />
+                    <span className="ml-1 hidden xl:inline">Mi Cuenta</span>
+                  </Button>
+                </SignedOut>
+              </ClerkProvider>
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" className="relative hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1">
+                  <Button variant="ghost" className="relative hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 font-whyte transition-all duration-300">
                     <ShoppingCart className="h-4 w-4" />
                     <span className="ml-1 hidden xl:inline">Carrito</span>
                     <Badge className="absolute -top-2 -right-2 bg-red-500">{cartItems.length}</Badge>
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="bg-white dark:bg-gray-800 dark:border-gray-700">
+                <SheetContent className="bg-white dark:bg-gray-800 dark:border-gray-700 transition-all duration-300">
                   <SheetHeader>
-                    <SheetTitle className="dark:text-white text-center">Carrito de Compras</SheetTitle>
-                    <SheetDescription className="dark:text-white font-bold text-md">
+                    <SheetTitle className="dark:text-white text-center font-whyte">Carrito de Compras</SheetTitle>
+                    <SheetDescription className="dark:text-white font-bold text-md font-whyte">
                       Total: ${cartItems.reduce((sum, item) => sum + item.price, 0).toLocaleString()}
                     </SheetDescription>
                   </SheetHeader>
                   {cartItems.map((item, index) => (
                     <div key={index} className="py-2">
-                      <h3 className="font-semibold">{item.name}</h3>
+                      <h3 className="font-semibold font-whyte">{item.name}</h3>
                       <p>${item.price.toLocaleString()}</p>
                     </div>
                   ))}
                 </SheetContent>
               </Sheet>
-              <Button variant="ghost" onClick={toggleDarkMode} className="hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1">
+              <Button variant="ghost" onClick={toggleDarkMode} className="hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 transition-all duration-300">
                 {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" className="lg:hidden hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1">
+                  <Button variant="ghost" className="lg:hidden hover:bg-[#3B82F6] dark:hover:bg-gray-700 rounded-xl px-2 py-1 transition-all duration-300">
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-[250px] sm:w-[300px]">
+                <SheetContent side="left" className="w-[250px] sm:w-[300px] transition-all duration-300">
                   <SheetHeader>
                     <SheetTitle>Menu</SheetTitle>
                   </SheetHeader>
@@ -195,7 +208,7 @@ export default function HomePage() {
                         <li key={item.name}>
                           <Link
                             href={item.href}
-                            className="flex items-center py-2 text-lg hover:text-[#3B82F6] dark:hover:text-gray-300"
+                            className="flex items-center py-2 text-lg hover:text-[#3B82F6] dark:hover:text-gray-300 transition-all duration-300"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {item.icon}
@@ -206,7 +219,7 @@ export default function HomePage() {
                       <li>
                         <Button
                           variant="ghost"
-                          className="w-full justify-start py-2 text-lg hover:text-[#3B82F6] dark:hover:text-gray-300"
+                          className="w-full justify-start py-2 text-lg hover:text-[#3B82F6] dark:hover:text-gray-300 font-whyte transition-all duration-300"
                           onClick={() => {
                             setMobileMenuOpen(false)
                             router.push('/mi-cuenta')
