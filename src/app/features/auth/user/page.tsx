@@ -107,16 +107,6 @@ export default function HomePage() {
   const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0)
   const cartItemCount = cart.reduce((count, item) => count + item.quantity, 0)
 
-  const addToCart = () => {
-    const newCartItems = Object.values(selectedComponents).map(component => ({
-      ...component,
-      quantity: 1
-    }))
-    setCartItems((prevItems) => [...prevItems, ...newCartItems])
-    setSelectedComponents({})
-    setCurrentStep(0)
-    setShowSummary(false)
-  }
 
   const updateCartItemQuantity = (index: number, change: number) => {
     setCartItems(prevItems => {
